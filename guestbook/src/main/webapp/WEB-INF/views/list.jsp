@@ -18,21 +18,8 @@ $(document).ready(function(){
 
 	// 코멘트 리스트를 로드한다.
 	getCommentList();
-	
-	
-	// enter key 입력시 코멘트 추가 버튼으로  
-	$("#txtComment").bind('keypress', function(e) {
-		var code = e.keyCode || e.which;
-		 if(code == 13) { //Enter keycode
-		  	$("#comment_btn").click();
-		 }
-	});
 		
 }); // end reday
-	
-	
-
-
 	
 	
 // 코멘트 리스트를 출력한다.
@@ -55,10 +42,9 @@ function getCommentList()
 }
 	
 	
-// 코멘트 리스트의 데이터를 포맷한다. 
+// 방명록 리스트 글의 데이터를 table 형태로 바꾼다.
 function getCommentListData(data)
 {
-	//TODO CODE REVIEW
  	var addList = "";
 	var length = data.length;
  	for (i=0; i< length; i++)
@@ -87,6 +73,28 @@ function getCommentListData(data)
 	return addList;
 }
 
+//댓글 삭제 
+function delcomment(cno)
+{
+	var params =  '{ "cno" : '+ cno +'}';
+	var confirmVal = confirm("글을 정말로 삭제하시겠습니까?");
+
+	if(confirmVal){
+		$.ajax({
+			type : "POST",
+			url : '<c:url value="/deleteComment"/>',
+			data : params,
+			contentType:"application/json; charset=utf-8",
+			success : function(response) {
+				getCommentList();
+			},
+			error : function(e) {
+				alert('Error: ' + e);
+			}
+		});	
+	}
+}
+
 </script>
 </head>
 
@@ -96,34 +104,35 @@ function getCommentListData(data)
 
 
 	<form class="form-horizontal" role="form" action="addComment" method="POST">
+	  <!-- 작성자입력 -->
 	  <div class="form-group">
 	    <label for="inputName" class="col-lg-2 control-label">Name</label>
 	    <div class="col-lg-10">
 	      <input type="text" class="form-control" name="writer" id="inputName" placeholder="Name">
 	    </div>
 	  </div>
-	
+	  <!-- 메일주소 입력 -->
 	  <div class="form-group">
 	    <label for="inputEmail" class="col-lg-2 control-label">Email</label>
 	    <div class="col-lg-10">
 	      <input type="email" class="form-control" name="email" id="inputEmail" placeholder="Email">
 	    </div>
 	  </div>
-	  
+ 	 <!-- 비밀번호입력 -->
 	  <div class="form-group">
 	    <label for="inputPassword" class="col-lg-2 control-label">Password</label>
 	    <div class="col-lg-10">
 	      <input type="password" class="form-control" name="passwd" id="inputPassword" placeholder="Password">
 	    </div>
 	  </div>
-	  
+	  <!-- 내용입력 -->
 	  <div class="form-group">
 	    <label for="inputContents" class="col-lg-2 control-label">Contents</label>
 	    <div class="col-lg-10">
 		  <textarea class="form-control" id="inputContents" name="contents" rows="3" placeholder="Contents..."></textarea>
 	    </div>
 	  </div>
-	  
+	  <!-- 저장버튼 -->
 	  <div class="form-group" style="float:right;">
 	    <div class="col-lg-offset-2 col-lg-10" >
 	      <button type="submit" class="btn btn-default" >Save</button>
@@ -133,9 +142,8 @@ function getCommentListData(data)
 	<table class="table table-striped">
 		<tbody class="table table-hover" id="listComment"></tbody>
     </table>
-
 	
-	</div> <!-- end container -->
+  </div> <!-- end container -->
 </body>
 </html>
 
