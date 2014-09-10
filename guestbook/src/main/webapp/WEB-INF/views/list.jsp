@@ -95,6 +95,42 @@ function delcomment(cno)
 	}
 }
 
+//댓글 수정 
+function modcomment(cno)
+{
+	$("#btnMod_" + cno).hide();
+	$("#btnSave_" + cno).css('visibility','visible');
+	$("#btnDelete_" + cno).hide();
+	
+	var reg = new RegExp('<br>', 'g');
+	var oldcomment =$("#"+cno).html();
+	$("#"+cno).append("<textarea class='form-control' id='txt_mod' maxlength='50' rows='3'>"+ oldcomment.replace(reg, '\n') + "</textarea>");
+}
+
+//댓글 저장 
+function savecomment(cno)
+{
+	var params =  '{ "cno" : '+ cno +', "contents" : "'+$("#txt_mod").val().replace(/\n/g, "\\n")+'"}';
+	alert(params);
+
+	$.ajax({
+		type : "POST",
+		url : '<c:url value="/updateComment"/>',
+		data : params,
+		contentType:"application/json; charset=utf-8",
+		success : function(response) {
+			$("#btnSave_" + cno).hide();
+			$("#btnMod_" + cno).show();
+			$("#btnDelete_" + cno).show();
+			getCommentList();
+		},
+		error : function(e) {
+			alert('Error: ' + e);
+		}
+	});		
+	
+}
+
 </script>
 </head>
 

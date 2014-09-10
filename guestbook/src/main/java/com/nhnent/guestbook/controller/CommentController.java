@@ -38,7 +38,7 @@ public class CommentController {
 		commentService.addComment(comment);
 		return "list";
 	}
-	
+		
 	@RequestMapping(value = "/deleteComment", method = RequestMethod.POST)
 	public String deleteComment(@RequestBody Comment comment, ModelMap modelMap) {
 		commentService.deleteComment(comment);
@@ -46,7 +46,7 @@ public class CommentController {
 	}
 
 	@RequestMapping(value = "/updateComment", method = RequestMethod.POST)
-	public String updateComment(HttpServletRequest request, @Valid @RequestBody Comment comment, Errors errors, ModelMap modelMap) {
+	public String updateComment(HttpServletRequest request, @RequestBody Comment comment, ModelMap modelMap) {
 		commentService.updateComment(comment);
 		return "list";
 	}
